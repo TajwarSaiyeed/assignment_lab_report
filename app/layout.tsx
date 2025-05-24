@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     "student assignments",
     "laboratory reports",
   ],
-  authors: [{ name: "Assignment Lab Report Team" }],
-  creator: "Assignment Lab Report Team",
-  publisher: "Assignment Lab Report",
+  authors: [{ name: "Tajwar Saiyeed Abid" }],
+  creator: "Tajwar Saiyeed Abid",
+  publisher: "Tajwar Saiyeed Abid",
   robots: {
     index: true,
     follow: true,
