@@ -1,11 +1,14 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { FormData } from "@/types/form"
+import { Card, CardContent } from "@/components/ui/card";
+import { FormData } from "@/types/form";
+import Image from "next/image";
 
 interface AssignmentDocumentProps {
-  formData: FormData
+  formData: FormData;
 }
 
-export default function AssignmentDocument({ formData }: AssignmentDocumentProps) {
+export default function AssignmentDocument({
+  formData,
+}: AssignmentDocumentProps) {
   return (
     <div className="w-full max-w-4xl mx-auto print-hidden">
       <Card className="bg-white shadow-lg relative overflow-hidden print-document w-full aspect-[1/1.414] max-h-[11.69in]">
@@ -18,17 +21,20 @@ export default function AssignmentDocument({ formData }: AssignmentDocumentProps
             backgroundPosition: "center",
           }}
         />
-        
+
         <div className="print-watermark" />
-        
+
         <CardContent className="p-8 relative z-10 print-content h-full flex flex-col justify-between">
           <div className="flex-1 space-y-6">
             <div className="text-center space-y-3">
               <div className="flex justify-center mb-4">
-                <img 
-                  src="/logo.jpeg" 
-                  alt="BGC Trust University Bangladesh Logo" 
-                  className="h-20 w-auto object-contain" 
+                <Image
+                  src="/logo.jpeg"
+                  alt="BGC Trust University Bangladesh Logo"
+                  width={80}
+                  height={80}
+                  className="h-20 w-auto object-contain"
+                  priority
                 />
               </div>
               <h1 className="text-2xl font-bold text-green-800 leading-tight">
@@ -52,29 +58,41 @@ export default function AssignmentDocument({ formData }: AssignmentDocumentProps
             {/* Assignment Details */}
             <div className="space-y-3 p-6 rounded-lg print:bg-white print:p-0">
               <div className="grid grid-cols-12 gap-2 items-center text-base">
-                <span className="col-span-5 font-bold">{formData.documentTitle || "Assignment"} no</span>
+                <span className="col-span-5 font-bold">
+                  {formData.documentTitle || "Assignment"} no
+                </span>
                 <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">{formData.assignmentNo || "___"}</span>
+                <span className="col-span-6 font-normal">
+                  {formData.assignmentNo || "___"}
+                </span>
               </div>
               <div className="grid grid-cols-12 gap-2 items-center text-base">
                 <span className="col-span-5 font-bold">Course Title</span>
                 <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">{formData.courseTitle || "___"}</span>
+                <span className="col-span-6 font-normal">
+                  {formData.courseTitle || "___"}
+                </span>
               </div>
               <div className="grid grid-cols-12 gap-2 items-center text-base">
                 <span className="col-span-5 font-bold">Course Code</span>
                 <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">{formData.courseCode || "___"}</span>
+                <span className="col-span-6 font-normal">
+                  {formData.courseCode || "___"}
+                </span>
               </div>
               <div className="grid grid-cols-12 gap-2 items-center text-base">
                 <span className="col-span-5 font-bold">Session</span>
                 <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">{formData.session || "___"}</span>
+                <span className="col-span-6 font-normal">
+                  {formData.session || "___"}
+                </span>
               </div>
               <div className="grid grid-cols-12 gap-2 items-center text-base">
                 <span className="col-span-5 font-bold">Program</span>
                 <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">{formData.program || "___"}</span>
+                <span className="col-span-6 font-normal">
+                  {formData.program || "___"}
+                </span>
               </div>
             </div>
 
@@ -89,7 +107,9 @@ export default function AssignmentDocument({ formData }: AssignmentDocumentProps
                   <div className="space-y-1">
                     <div>
                       <span className="font-bold">Course Teacher: </span>
-                      <span className="font-normal">{formData.courseTeacher || "___"}</span>
+                      <span className="font-normal">
+                        {formData.courseTeacher || "___"}
+                      </span>
                     </div>
                     <div className="font-normal">
                       {formData.designation || "___"}
@@ -110,15 +130,23 @@ export default function AssignmentDocument({ formData }: AssignmentDocumentProps
                   <div className="space-y-1">
                     <div>
                       <span className="font-bold">Name: </span>
-                      <span className="font-normal">{formData.studentName || "___"}</span>
+                      <span className="font-normal">
+                        {formData.studentName || "___"}
+                      </span>
                     </div>
                     <div>
                       <span className="font-bold">Internal ID: </span>
-                      <span className="font-normal">{formData.internalId || "___"}</span>
+                      <span className="font-normal">
+                        {formData.internalId || "___"}
+                      </span>
                     </div>
                     <div>
-                      <span className="font-bold">{formData.semester || "___"} Semester Section: </span>
-                      <span className="font-normal">{formData.section || "___"}</span>
+                      <span className="font-bold">
+                        {formData.semester || "___"} Semester Section:{" "}
+                      </span>
+                      <span className="font-normal">
+                        {formData.section || "___"}
+                      </span>
                     </div>
                     <div className="font-bold text-green-800">
                       Department of CSE, BGCTUB
@@ -147,5 +175,5 @@ export default function AssignmentDocument({ formData }: AssignmentDocumentProps
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
