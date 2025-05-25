@@ -1,9 +1,20 @@
+"use client";
+
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
-import { FormData } from "@/types/form";
+import { formSchema, type FormData } from "@/lib/form-schema";
 
-const initialFormData: FormData = {
+interface DocumentHistory {
+  id: string;
+  data: FormData;
+  createdAt: string;
+  lastModified: string;
+}
+
+const defaultValues: FormData = {
   assignmentNo: "",
   courseTitle: "",
   courseCode: "",
@@ -17,49 +28,151 @@ const initialFormData: FormData = {
   section: "",
   submissionDate: "",
   documentTitle: "Assignment",
+  experimentName: "",
+  experimentNo: "",
+  experimentDate: "",
 };
 
 export function useFormManagement() {
   const { toast } = useToast();
   const [date, setDate] = useState<Date>();
+  const [experimentDate, setExperimentDate] = useState<Date>();
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const isFormValid = () => {
-    return (
-      formData.assignmentNo.trim() !== "" &&
-      formData.courseTitle.trim() !== "" &&
-      formData.courseCode.trim() !== "" &&
-      formData.session.trim() !== "" &&
-      formData.courseTeacher.trim() !== "" &&
-      formData.studentName.trim() !== "" &&
-      formData.internalId.trim() !== "" &&
-      formData.semester.trim() !== "" &&
-      formData.section.trim() !== ""
-    );
-  };
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
+    mode: "onChange",
+  });
 
+  const formData = form.watch();
+
+  // Handle client-side mounting
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Update submission date when date changes
+  useEffect(() => {
+    if (date) {
+      const formattedDate = format(date, "do MMMM, yyyy");
+      form.setValue("submissionDate", formattedDate);
+    }
+  }, [date, form]);
+
+  // Update experiment date when experimentDate changes
+  useEffect(() => {
+    if (experimentDate) {
+      const formattedDate = format(experimentDate, "do MMMM, yyyy");
+      form.setValue("experimentDate", formattedDate);
+    }
+  }, [experimentDate, form]);
+
+  // Load saved data on mount (client-side only)
+  useEffect(() => {
+    if (!isMounted) return;
+    
     const savedData = localStorage.getItem("bgc-assignment-data");
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
-        setFormData(parsedData);
+        // Merge saved data with default values to ensure all fields exist
+        const mergedData = { ...defaultValues, ...parsedData };
+        form.reset(mergedData);
       } catch (error) {
         console.error("Error loading saved data:", error);
       }
     }
-  }, []);
+  }, [form, isMounted]);
 
-  useEffect(() => {
-    if (date) {
-      const formattedDate = format(date, "do MMMM, yyyy");
-      setFormData((prev) => ({ ...prev, submissionDate: formattedDate }));
+  // Document history management functions
+  const saveToDocumentHistory = (data: FormData) => {
+    if (!isMounted) return;
+    
+    try {
+      const history: DocumentHistory[] = JSON.parse(
+        localStorage.getItem("bgc-document-history") || "[]"
+      );
+      
+      const documentId = `doc_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      const timestamp = new Date().toISOString();
+      
+      const newDocument: DocumentHistory = {
+        id: documentId,
+        data: { ...data },
+        createdAt: timestamp,
+        lastModified: timestamp,
+      };
+      
+      // Check if this is an update to an existing document
+      const existingIndex = history.findIndex(doc => 
+        doc.data.studentName === data.studentName &&
+        doc.data.internalId === data.internalId &&
+        doc.data.courseCode === data.courseCode &&
+        doc.data.documentTitle === data.documentTitle &&
+        (
+          (data.documentTitle === "Lab Report" && doc.data.experimentName === data.experimentName) ||
+          (data.documentTitle !== "Lab Report" && doc.data.assignmentNo === data.assignmentNo)
+        )
+      );
+      
+      if (existingIndex !== -1) {
+        // Update existing document
+        history[existingIndex] = {
+          ...history[existingIndex],
+          data: { ...data },
+          lastModified: timestamp,
+        };
+      } else {
+        // Add new document to the beginning of the array
+        history.unshift(newDocument);
+      }
+      
+      // Keep only the latest 50 documents
+      if (history.length > 50) {
+        history.splice(50);
+      }
+      
+      localStorage.setItem("bgc-document-history", JSON.stringify(history));
+    } catch (error) {
+      console.error("Error saving to document history:", error);
     }
-  }, [date]);
+  };
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const loadDocumentFromHistory = (data: FormData) => {
+    form.reset(data);
+    setShowForm(true);
+    
+    // Set the submission date if it exists
+    if (data.submissionDate) {
+      try {
+        // Try to parse the date from the formatted string
+        const parsedDate = new Date(data.submissionDate);
+        if (!isNaN(parsedDate.getTime())) {
+          setDate(parsedDate);
+        }
+      } catch (error) {
+        console.error("Error parsing submission date:", error);
+      }
+    }
+    
+    // Set the experiment date if it exists
+    if (data.experimentDate) {
+      try {
+        // Try to parse the date from the formatted string
+        const parsedExperimentDate = new Date(data.experimentDate);
+        if (!isNaN(parsedExperimentDate.getTime())) {
+          setExperimentDate(parsedExperimentDate);
+        }
+      } catch (error) {
+        console.error("Error parsing experiment date:", error);
+      }
+    }
+  };
+
+  const isFormValid = () => {
+    return form.formState.isValid;
   };
 
   const createNewDocument = () => {
@@ -67,8 +180,9 @@ export function useFormManagement() {
   };
 
   const resetForm = () => {
-    setFormData(initialFormData);
+    form.reset(defaultValues);
     setDate(undefined);
+    setExperimentDate(undefined);
     toast({
       title: "Form Reset",
       description: "All fields have been cleared.",
@@ -76,8 +190,20 @@ export function useFormManagement() {
   };
 
   const saveToLocalStorage = () => {
+    if (!isMounted) return;
+    
     try {
-      localStorage.setItem("bgc-assignment-data", JSON.stringify(formData));
+      const currentValues = form.getValues();
+      localStorage.setItem("bgc-assignment-data", JSON.stringify(currentValues));
+      
+      // Also save to document history
+      saveToDocumentHistory(currentValues);
+      
+      // Refresh recent documents if the function exists
+      if (typeof window !== 'undefined' && (window as any).refreshRecentDocuments) {
+        (window as any).refreshRecentDocuments();
+      }
+      
       toast({
         title: "Data Saved Successfully",
         description: "Your form data has been saved for future editing.",
@@ -92,11 +218,28 @@ export function useFormManagement() {
   };
 
   const loadFromLocalStorage = () => {
+    if (!isMounted) return;
+    
     try {
+      // First try to load the most recent document from history
+      if (typeof window !== 'undefined' && (window as any).getLatestDocument) {
+        const latestDoc = (window as any).getLatestDocument();
+        if (latestDoc) {
+          loadDocumentFromHistory(latestDoc.data);
+          toast({
+            title: "Latest Document Loaded",
+            description: "Your most recently saved document has been loaded.",
+          });
+          return;
+        }
+      }
+      
+      // Fallback to regular localStorage if no recent documents
       const savedData = localStorage.getItem("bgc-assignment-data");
       if (savedData) {
         const parsedData = JSON.parse(savedData);
-        setFormData(parsedData);
+        const mergedData = { ...defaultValues, ...parsedData };
+        form.reset(mergedData);
         setShowForm(true);
         toast({
           title: "Data Loaded Successfully",
@@ -118,13 +261,20 @@ export function useFormManagement() {
     }
   };
 
-  const copyFormData = async () => {
+  const copyFormData = () => {
+    if (!isMounted) return;
+    
     try {
-      const dataString = JSON.stringify(formData, null, 2);
-      await navigator.clipboard.writeText(dataString);
+      const currentValues = form.getValues();
+      const formText = Object.entries(currentValues)
+        .filter(([_, value]) => value && value.toString().trim() !== "")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join("\n");
+
+      navigator.clipboard.writeText(formText);
       toast({
-        title: "Data Copied Successfully",
-        description: "Form data has been copied to your clipboard.",
+        title: "Data Copied",
+        description: "Form data has been copied to clipboard.",
       });
     } catch (error) {
       toast({
@@ -136,7 +286,8 @@ export function useFormManagement() {
   };
 
   const handlePrint = () => {
-    saveToLocalStorage();
+    if (!isMounted || !isFormValid()) return;
+    
     window.print();
   };
 
@@ -193,14 +344,21 @@ export function useFormManagement() {
     }
   };
 
+  const onSubmit = (data: FormData) => {
+    console.log("Form submitted:", data);
+    saveToLocalStorage();
+    saveToDocumentHistory(data);
+  };
+
   return {
+    form,
     formData,
     date,
     setDate,
+    experimentDate,
+    setExperimentDate,
     showForm,
-    setShowForm,
     isFormValid,
-    handleInputChange,
     createNewDocument,
     resetForm,
     saveToLocalStorage,
@@ -208,5 +366,7 @@ export function useFormManagement() {
     copyFormData,
     handlePrint,
     exportToPDF,
+    onSubmit,
+    loadDocumentFromHistory,
   };
 }

@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { FormData } from "@/types/form";
+import { FormData } from "@/lib/form-schema";
 import Image from "next/image";
 
 interface AssignmentDocumentProps {
@@ -57,65 +57,114 @@ export default function AssignmentDocument({
 
             {/* Assignment Details */}
             <div className="space-y-3 p-6 rounded-lg print:bg-white print:p-0">
-              <div className="grid grid-cols-12 gap-2 items-center text-base">
-                <span className="col-span-5 font-bold">
-                  {formData.documentTitle || "Assignment"} no
-                </span>
-                <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">
-                  {formData.assignmentNo || "___"}
-                </span>
-              </div>
-              <div className="grid grid-cols-12 gap-2 items-center text-base">
-                <span className="col-span-5 font-bold">Course Title</span>
-                <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">
-                  {formData.courseTitle || "___"}
-                </span>
-              </div>
-              <div className="grid grid-cols-12 gap-2 items-center text-base">
-                <span className="col-span-5 font-bold">Course Code</span>
-                <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">
-                  {formData.courseCode || "___"}
-                </span>
-              </div>
-              <div className="grid grid-cols-12 gap-2 items-center text-base">
-                <span className="col-span-5 font-bold">Session</span>
-                <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">
-                  {formData.session || "___"}
-                </span>
-              </div>
-              <div className="grid grid-cols-12 gap-2 items-center text-base">
-                <span className="col-span-5 font-bold">Program</span>
-                <span className="col-span-1 font-bold text-center">:</span>
-                <span className="col-span-6 font-normal">
-                  {formData.program || "___"}
-                </span>
-              </div>
+              {formData.documentTitle === "Lab Report" ? (
+                <>
+                  {/* Lab Report specific layout */}
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Experiment Name</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.experimentName || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Experiment No</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.experimentNo || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Course Title</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.courseTitle || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Course Code</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.courseCode || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Session</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.session || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Program</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.program || "___"}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Assignment/other document types layout */}
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">
+                      {formData.documentTitle || "Assignment"} no
+                    </span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.assignmentNo || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Course Title</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.courseTitle || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Course Code</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.courseCode || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Session</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.session || "___"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-12 gap-2 items-center text-base">
+                    <span className="col-span-5 font-bold">Program</span>
+                    <span className="col-span-1 font-bold text-center">:</span>
+                    <span className="col-span-6 font-normal">
+                      {formData.program || "___"}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
 
-            {/* Two Column Layout for Submitted To and Submitted By */}
             <div className="grid grid-cols-1 gap-8 mt-8">
-              {/* Submitted To */}
               <div className="text-center space-y-4">
-                <h3 className="text-lg font-bold border-b-2 border-gray-300 pb-2 inline-block">
+                <h3 className="text-lg font-bold border-b-2 border-gray-300 inline-block">
                   Submitted To
                 </h3>
                 <div className="space-y-2 text-base">
                   <div className="space-y-1">
                     <div>
-                      <span className="font-bold">Course Teacher: </span>
                       <span className="font-normal">
                         {formData.courseTeacher || "___"}
                       </span>
                     </div>
                     <div className="font-normal">
-                      {formData.designation || "___"}
-                    </div>
-                    <div className="font-bold text-green-800">
-                      BGC TRUST UNIVERSITY BANGLADESH
+                      {formData.designation || "___"} at{" "}
+                      <br />
+                      <span className="font-bold text-green-800">
+                        BGC TRUST UNIVERSITY BANGLADESH
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -123,7 +172,7 @@ export default function AssignmentDocument({
 
               {/* Submitted By */}
               <div className="text-center space-y-4">
-                <h3 className="text-lg font-bold border-b-2 border-gray-300 pb-2 inline-block">
+                <h3 className="text-lg font-bold border-b-2 border-gray-300 inline-block">
                   Submitted By
                 </h3>
                 <div className="space-y-2 text-base">
@@ -159,12 +208,29 @@ export default function AssignmentDocument({
 
           {/* Footer */}
           <div className="flex justify-between items-end pt-8 border-t border-gray-200 print:border-gray-400">
-            <div className="text-base">
-              <span className="font-bold">Date of Submission: </span>
-              <span className="font-normal">
-                {formData.submissionDate || "_______________"}
-              </span>
-            </div>
+            {formData.documentTitle === "Lab Report" ? (
+              <div className="space-y-2">
+                <div className="text-base">
+                  <span className="font-bold">Date of Experiment: </span>
+                  <span className="font-normal">
+                    {formData.experimentDate || "_______________"}
+                  </span>
+                </div>
+                <div className="text-base">
+                  <span className="font-bold">Date of Submission: </span>
+                  <span className="font-normal">
+                    {formData.submissionDate || "_______________"}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="text-base">
+                <span className="font-bold">Date of Submission: </span>
+                <span className="font-normal">
+                  {formData.submissionDate || "_______________"}
+                </span>
+              </div>
+            )}
             <div className="text-center">
               <div className="border-b-2 border-gray-500 w-48 mb-2"></div>
               <span className="text-sm font-normal text-gray-600">
