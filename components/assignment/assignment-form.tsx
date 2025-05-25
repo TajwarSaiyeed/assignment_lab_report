@@ -322,7 +322,7 @@ export default function AssignmentForm({
                   <FormField
                     control={form.control}
                     name="experimentDate"
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem>
                         <FormLabel>Date of Experiment</FormLabel>
                         <Popover>
@@ -367,7 +367,7 @@ export default function AssignmentForm({
               <FormField
                 control={form.control}
                 name="submissionDate"
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <FormLabel>Submission Date</FormLabel>
                     <Popover>

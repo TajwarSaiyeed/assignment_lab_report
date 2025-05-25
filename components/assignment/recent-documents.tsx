@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -29,6 +29,14 @@ interface RecentDocumentsProps {
   onDocumentUpdate?: () => void;
 }
 
+declare global {
+  interface Window {
+    addRecentDocument?: (data: FormData) => void;
+    getLatestDocument?: () => DocumentHistory | null;
+    refreshRecentDocuments?: () => void;
+  }
+}
+
 export default function RecentDocuments({
   onLoadDocument,
   onDocumentUpdate,
@@ -37,19 +45,7 @@ export default function RecentDocuments({
   const [isMounted, setIsMounted] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    setIsMounted(true);
-    loadDocuments();
-  }, []);
-
-  // Refresh documents when external updates happen
-  useEffect(() => {
-    if (isMounted) {
-      loadDocuments();
-    }
-  }, [onDocumentUpdate, isMounted]);
-
-  const loadDocuments = () => {
+  const loadDocuments = useCallback(() => {
     if (!isMounted) return;
     
     try {
@@ -66,9 +62,21 @@ export default function RecentDocuments({
     } catch (error) {
       console.error("Error loading document history:", error);
     }
-  };
+  }, [isMounted]);
 
-  const saveDocuments = (docs: DocumentHistory[]) => {
+  useEffect(() => {
+    setIsMounted(true);
+    loadDocuments();
+  }, [loadDocuments]);
+
+  // Refresh documents when external updates happen
+  useEffect(() => {
+    if (isMounted) {
+      loadDocuments();
+    }
+  }, [onDocumentUpdate, isMounted, loadDocuments]);
+
+  const saveDocuments = useCallback((docs: DocumentHistory[]) => {
     if (!isMounted) return;
     
     try {
@@ -77,9 +85,9 @@ export default function RecentDocuments({
     } catch (error) {
       console.error("Error saving document history:", error);
     }
-  };
+  }, [isMounted]);
 
-  const addDocument = (formData: FormData) => {
+  const addDocument = useCallback((formData: FormData) => {
     const timestamp = new Date().toISOString();
     const newDoc: DocumentHistory = {
       id: Date.now().toString(),
@@ -97,9 +105,9 @@ export default function RecentDocuments({
       title: "Document Saved",
       description: "Document added to recent history.",
     });
-  };
+  }, [documents, saveDocuments, toast]);
 
-  const deleteDocument = (id: string) => {
+  const deleteDocument = useCallback((id: string) => {
     const updatedDocs = documents.filter((doc) => doc.id !== id);
     saveDocuments(updatedDocs);
 
@@ -107,9 +115,9 @@ export default function RecentDocuments({
       title: "Document Deleted",
       description: "Document removed from history.",
     });
-  };
+  }, [documents, saveDocuments, toast]);
 
-  const clearHistory = () => {
+  const clearHistory = useCallback(() => {
     setDocuments([]);
     if (isMounted) {
       localStorage.removeItem("bgc-document-history");
@@ -119,15 +127,15 @@ export default function RecentDocuments({
       title: "History Cleared",
       description: "All document history has been cleared.",
     });
-  };
+  }, [isMounted, toast]);
 
-  const loadDocument = (doc: DocumentHistory) => {
+  const loadDocument = useCallback((doc: DocumentHistory) => {
     onLoadDocument(doc.data);
     toast({
       title: "Document Loaded",
       description: "Document data has been loaded into the form.",
     });
-  };
+  }, [onLoadDocument, toast]);
 
   const getDocumentTitle = (data: FormData) => {
     if (data.documentTitle === "Lab Report" && data.experimentName) {
@@ -139,24 +147,24 @@ export default function RecentDocuments({
     return data.documentTitle || "Untitled Document";
   };
 
-  const getLatestDocument = () => {
+  const getLatestDocument = useCallback(() => {
     if (documents.length > 0) {
       return documents[0]; // Already sorted by lastModified, newest first
     }
     return null;
-  };
+  }, [documents]);
 
   // Expose functions to parent component
   useEffect(() => {
-    (window as any).addRecentDocument = addDocument;
-    (window as any).getLatestDocument = getLatestDocument;
-    (window as any).refreshRecentDocuments = loadDocuments;
+    window.addRecentDocument = addDocument;
+    window.getLatestDocument = getLatestDocument;
+    window.refreshRecentDocuments = loadDocuments;
     return () => {
-      delete (window as any).addRecentDocument;
-      delete (window as any).getLatestDocument;
-      delete (window as any).refreshRecentDocuments;
+      delete window.addRecentDocument;
+      delete window.getLatestDocument;
+      delete window.refreshRecentDocuments;
     };
-  }, [documents]);
+  }, [documents, addDocument, getLatestDocument, loadDocuments]);
 
   if (!isMounted) {
     return null;
