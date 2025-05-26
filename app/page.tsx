@@ -5,7 +5,6 @@ import Header from "@/components/assignment/header";
 import AssignmentForm from "@/components/assignment/assignment-form";
 import AssignmentDocument from "@/components/assignment/assignment-document";
 import RecentDocuments from "@/components/assignment/recent-documents";
-import DeveloperCredits from "@/components/assignment/developer-credits";
 import { useFormManagement } from "@/hooks/use-form-management";
 
 export default function AssignmentFormPage() {
@@ -45,11 +44,9 @@ export default function AssignmentFormPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="flex">
-        {/* Main Content */}
-        <div className="flex-1 p-4">
-          <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen">
+      <div className="flex flex-col md:flex-row">
+        <div className="flex-1 print:flex-none p-4 space-y-4">
             <Header
               loadFromLocalStorage={loadFromLocalStorage}
               createNewDocument={createNewDocument}
@@ -79,13 +76,9 @@ export default function AssignmentFormPage() {
             )}
 
             <AssignmentDocument formData={formData} />
-
-            <DeveloperCredits />
-          </div>
         </div>
 
-        {/* Side Panel for Recent Documents */}
-        <div className="w-72 bg-white border-l border-gray-200 h-screen sticky top-0 overflow-hidden">
+        <div className="w-72 border-l border-gray-200 h-screen sticky top-0 overflow-hidden print:hidden">
           <div className="p-3 h-full">
             <RecentDocuments
               onLoadDocument={loadDocumentFromHistory}

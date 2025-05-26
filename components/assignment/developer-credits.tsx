@@ -1,81 +1,84 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Github as GithubIcon, Linkedin as LinkedinIcon, Facebook as FacebookIcon, ExternalLink as ExternalLinkIcon } from "lucide-react"
-import { SocialLink } from "@/types/form"
+import {
+  Github as GithubIcon,
+  Linkedin as LinkedinIcon,
+  Facebook as FacebookIcon,
+  ExternalLink as ExternalLinkIcon,
+} from "lucide-react";
+import { SiCodechef, SiCodeforces, SiLeetcode } from "react-icons/si";
 
-const socialLinks: SocialLink[] = [
+const socialLinks = [
   {
     name: "GitHub",
     url: "https://github.com/TajwarSaiyeed",
     icon: GithubIcon,
-    color: "text-gray-800 hover:text-gray-600",
+    color: "hover:text-gray-800",
   },
   {
-    name: "LinkedIn",
+    name: "LinkedIn", 
     url: "https://www.linkedin.com/in/tajwarsaiyeed/",
     icon: LinkedinIcon,
-    color: "text-blue-600 hover:text-blue-500",
+    color: "hover:text-blue-600",
   },
   {
     name: "Facebook",
     url: "https://www.facebook.com/tajwar.saiyeed.abid",
     icon: FacebookIcon,
-    color: "text-blue-700 hover:text-blue-600",
+    color: "hover:text-blue-700",
   },
   {
     name: "Portfolio",
     url: "https://portfolio-tsa.vercel.app/home",
     icon: ExternalLinkIcon,
-    color: "text-purple-600 hover:text-purple-500",
+    color: "hover:text-purple-600",
   },
   {
     name: "LeetCode",
     url: "https://leetcode.com/u/TajwarSaiyeed/",
-    icon: ExternalLinkIcon,
-    color: "text-orange-600 hover:text-orange-500",
+    icon: SiLeetcode,
+    color: "hover:text-orange-600",
   },
   {
     name: "CodeChef",
     url: "https://www.codechef.com/users/tajwarsaiyeed",
-    icon: ExternalLinkIcon,
-    color: "text-brown-600 hover:text-brown-500",
+    icon: SiCodechef,
+    color: "hover:text-brown-600",
   },
   {
     name: "Codeforces",
     url: "https://codeforces.com/profile/tajwarsaiyeed",
-    icon: ExternalLinkIcon,
-    color: "text-red-600 hover:text-red-500",
+    icon: SiCodeforces,
+    color: "hover:text-red-600",
   },
-]
+];
 
 export default function DeveloperCredits() {
   return (
-    <Card className="print:hidden bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
-      <CardContent className="p-6">
-        <div className="text-center">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Developed by Tajwar Saiyeed</h3>
-          <p className="text-gray-600 mb-6">
-            Computer Science & Engineering Student at BGC Trust University Bangladesh
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {socialLinks.map((link) => {
-              const IconComponent = link.icon
-              return (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-md ${link.color}`}
-                  title={link.name}
-                >
-                  <IconComponent className="w-5 h-5" />
-                  <span className="font-medium">{link.name}</span>
-                </a>
-              )
-            })}
-          </div>
+    <footer className="print:hidden mt-8 py-4 border-t border-gray-200">
+      <div className="text-center">
+        <p className="text-sm text-gray-700 mb-2">
+          Developed by <span className="font-medium">Tajwar Saiyeed</span>
+        </p>
+        <p className="text-xs text-gray-500 mb-3">
+          CSE Student at BGC Trust University Bangladesh
+        </p>
+        <div className="flex justify-center gap-3">
+          {socialLinks.map((link) => {
+            const IconComponent = link.icon;
+            return (
+              <a
+                key={link.name}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`text-gray-500 ${link.color} transition-colors duration-200`}
+                title={link.name}
+              >
+                <IconComponent className="w-4 h-4" />
+              </a>
+            );
+          })}
         </div>
-      </CardContent>
-    </Card>
-  )
+      </div>
+    </footer>
+  );
 }

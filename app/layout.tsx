@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import DeveloperCredits from "@/components/assignment/developer-credits";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://alr-tsa.vercel.app"),
@@ -140,8 +141,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`antialiased`}>
+      <body className={`antialiased max-w-screen-2xl mx-auto`}>
         {children}
+        <DeveloperCredits />
         <Toaster />
       </body>
     </html>

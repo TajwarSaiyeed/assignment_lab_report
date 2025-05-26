@@ -171,8 +171,8 @@ The application follows modern React patterns with:
 **Program:** Computer Science & Engineering  
 
 ### Connect with the Developer
-- **GitHub:** [tajwar](https://github.com/tajwar)
-- **LinkedIn:** [tajwar-saiyeed](https://linkedin.com/in/tajwar-saiyeed)
+- **GitHub:** [tajwar](https://github.com/tajwarsaiyeed)
+- **LinkedIn:** [tajwar-saiyeed](https://linkedin.com/in/tajwarsaiyeed)
 - **Facebook:** [tajwar.saiyeed.abid](https://facebook.com/tajwar.saiyeed.abid)
 
 ## 📄 License
