@@ -48,12 +48,10 @@ export function useFormManagement() {
 
   const formData = form.watch();
 
-  // Handle client-side mounting
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Update submission date when date changes
   useEffect(() => {
     if (date) {
       const formattedDate = format(date, "do MMMM, yyyy");
@@ -61,7 +59,6 @@ export function useFormManagement() {
     }
   }, [date, form]);
 
-  // Update experiment date when experimentDate changes
   useEffect(() => {
     if (experimentDate) {
       const formattedDate = format(experimentDate, "do MMMM, yyyy");
@@ -69,7 +66,6 @@ export function useFormManagement() {
     }
   }, [experimentDate, form]);
 
-  // Load saved data on mount (client-side only)
   useEffect(() => {
     if (!isMounted) return;
     
@@ -77,7 +73,6 @@ export function useFormManagement() {
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
-        // Merge saved data with default values to ensure all fields exist
         const mergedData = { ...defaultValues, ...parsedData };
         form.reset(mergedData);
       } catch (error) {
@@ -86,7 +81,6 @@ export function useFormManagement() {
     }
   }, [form, isMounted]);
 
-  // Document history management functions
   const saveToDocumentHistory = (data: FormData) => {
     if (!isMounted) return;
     
@@ -105,7 +99,6 @@ export function useFormManagement() {
         lastModified: timestamp,
       };
       
-      // Check if this is an update to an existing document
       const existingIndex = history.findIndex(doc => 
         doc.data.studentName === data.studentName &&
         doc.data.internalId === data.internalId &&
@@ -118,18 +111,15 @@ export function useFormManagement() {
       );
       
       if (existingIndex !== -1) {
-        // Update existing document
         history[existingIndex] = {
           ...history[existingIndex],
           data: { ...data },
           lastModified: timestamp,
         };
       } else {
-        // Add new document to the beginning of the array
         history.unshift(newDocument);
       }
       
-      // Keep only the latest 50 documents
       if (history.length > 50) {
         history.splice(50);
       }
@@ -144,10 +134,8 @@ export function useFormManagement() {
     form.reset(data);
     setShowForm(true);
     
-    // Set the submission date if it exists
     if (data.submissionDate) {
       try {
-        // Try to parse the date from the formatted string
         const parsedDate = new Date(data.submissionDate);
         if (!isNaN(parsedDate.getTime())) {
           setDate(parsedDate);
@@ -157,10 +145,8 @@ export function useFormManagement() {
       }
     }
     
-    // Set the experiment date if it exists
     if (data.experimentDate) {
       try {
-        // Try to parse the date from the formatted string
         const parsedExperimentDate = new Date(data.experimentDate);
         if (!isNaN(parsedExperimentDate.getTime())) {
           setExperimentDate(parsedExperimentDate);
@@ -196,10 +182,8 @@ export function useFormManagement() {
       const currentValues = form.getValues();
       localStorage.setItem("bgc-assignment-data", JSON.stringify(currentValues));
       
-      // Also save to document history
       saveToDocumentHistory(currentValues);
       
-      // Refresh recent documents if the function exists
       if (typeof window !== 'undefined' && (window as any).refreshRecentDocuments) {
         (window as any).refreshRecentDocuments();
       }
@@ -221,7 +205,6 @@ export function useFormManagement() {
     if (!isMounted) return;
     
     try {
-      // First try to load the most recent document from history
       if (typeof window !== 'undefined' && (window as any).getLatestDocument) {
         const latestDoc = (window as any).getLatestDocument();
         if (latestDoc) {
@@ -234,7 +217,6 @@ export function useFormManagement() {
         }
       }
       
-      // Fallback to regular localStorage if no recent documents
       const savedData = localStorage.getItem("bgc-assignment-data");
       if (savedData) {
         const parsedData = JSON.parse(savedData);

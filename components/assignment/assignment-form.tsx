@@ -88,7 +88,9 @@ export default function AssignmentForm({
                       <SelectContent>
                         <SelectItem value="Assignment">Assignment</SelectItem>
                         <SelectItem value="Lab Report">Lab Report</SelectItem>
-                        <SelectItem value="Project Report">Project Report</SelectItem>
+                        <SelectItem value="Project Report">
+                          Project Report
+                        </SelectItem>
                         <SelectItem value="Term Paper">Term Paper</SelectItem>
                       </SelectContent>
                     </Select>
@@ -173,8 +175,12 @@ export default function AssignmentForm({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="B.Sc. (Hons.) in CSE">B.Sc. (Hons.) in CSE</SelectItem>
-                        <SelectItem value="B.Sc. (Hons.) in EEE">B.Sc. (Hons.) in EEE</SelectItem>
+                        <SelectItem value="B.Sc. (Hons.) in CSE">
+                          B.Sc. (Hons.) in CSE
+                        </SelectItem>
+                        <SelectItem value="B.Sc. (Hons.) in EEE">
+                          B.Sc. (Hons.) in EEE
+                        </SelectItem>
                         <SelectItem value="BBA">BBA</SelectItem>
                         <SelectItem value="LLB (Hons.)">LLB (Hons.)</SelectItem>
                       </SelectContent>
@@ -207,7 +213,10 @@ export default function AssignmentForm({
                   <FormItem>
                     <FormLabel>Designation</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Assistant Professor" {...field} />
+                      <Input
+                        placeholder="e.g., Assistant Professor"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -298,7 +307,10 @@ export default function AssignmentForm({
                       <FormItem>
                         <FormLabel>Experiment Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter experiment name" {...field} />
+                          <Input
+                            placeholder="Enter experiment name"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -312,7 +324,10 @@ export default function AssignmentForm({
                       <FormItem>
                         <FormLabel>Experiment Number</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter experiment number" {...field} />
+                          <Input
+                            placeholder="Enter experiment number"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -350,7 +365,8 @@ export default function AssignmentForm({
                               selected={experimentDate}
                               onSelect={setExperimentDate}
                               disabled={(date) =>
-                                date > new Date() || date < new Date("1900-01-01")
+                                date > new Date() ||
+                                date < new Date("1900-01-01")
                               }
                               initialFocus
                             />
@@ -381,7 +397,11 @@ export default function AssignmentForm({
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {date ? format(date, "PPP") : <span>Pick a date</span>}
+                            {date ? (
+                              format(date, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
@@ -404,6 +424,7 @@ export default function AssignmentForm({
               <Button
                 type="button"
                 onClick={saveToLocalStorage}
+                disabled={!isFormValid()}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <Save className="w-4 h-4 mr-2" />
@@ -414,6 +435,7 @@ export default function AssignmentForm({
                 type="button"
                 onClick={resetForm}
                 variant="outline"
+                disabled={!isFormValid()}
                 className="border-red-600 text-red-600 hover:bg-red-50"
               >
                 <RotateCcw className="w-4 h-4 mr-2" />
@@ -424,6 +446,7 @@ export default function AssignmentForm({
                 type="button"
                 onClick={copyFormData}
                 variant="outline"
+                disabled={!isFormValid()}
                 className="border-purple-600 text-purple-600 hover:bg-purple-50"
               >
                 <Copy className="w-4 h-4 mr-2" />

@@ -52,7 +52,6 @@ export default function RecentDocuments({
       const savedDocs = localStorage.getItem("bgc-document-history");
       if (savedDocs) {
         const parsedDocs = JSON.parse(savedDocs);
-        // Sort by last modified date, newest first
         const sortedDocs = parsedDocs.sort(
           (a: DocumentHistory, b: DocumentHistory) =>
             new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()
@@ -69,7 +68,6 @@ export default function RecentDocuments({
     loadDocuments();
   }, [loadDocuments]);
 
-  // Refresh documents when external updates happen
   useEffect(() => {
     if (isMounted) {
       loadDocuments();
@@ -97,7 +95,6 @@ export default function RecentDocuments({
     };
 
     const updatedDocs = [newDoc, ...documents];
-    // Keep only the last 20 documents
     const limitedDocs = updatedDocs.slice(0, 20);
     saveDocuments(limitedDocs);
 
