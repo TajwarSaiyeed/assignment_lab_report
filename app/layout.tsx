@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import DeveloperCredits from "@/components/assignment/developer-credits";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://alr-tsa.vercel.app"),
@@ -145,6 +146,7 @@ export default function RootLayout({
         {children}
         <DeveloperCredits />
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );
