@@ -134,34 +134,30 @@
       line-height: 1.4 !important;
     }
 
-    .print-hidden {
+    .print\:hidden,
+    .no-print {
       display: none !important;
     }
 
     .print-document {
-      display: block !important;
-      margin: 0 !important;
-      padding: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      height: auto !important;
+      max-height: none !important;
+      aspect-ratio: unset !important;
       box-shadow: none !important;
       border: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
       background: white !important;
-      page-break-inside: avoid !important;
-      width: 100% !important;
-      height: 100vh !important;
-      font-family: "Times New Roman", serif !important;
+      page-break-inside: avoid;
+      overflow: visible !important;
     }
 
     .print-content {
-      position: relative !important;
-      z-index: 10 !important;
-      padding: 1in 0.75in !important;
-      margin: 0 !important;
-      font-size: 12pt !important;
-      line-height: 1.5 !important;
-      height: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: space-between !important;
+      padding: 1rem !important;
+      height: auto !important;
+      display: block !important;
     }
 
     .print-content h1 {
@@ -213,11 +209,12 @@
     }
 
     @page {
-      size: A4 portrait;
-      margin: 0.2in 0.75in;
+      size: A4;
+      margin: 0.5in;
+      -webkit-print-color-adjust: exact;
+      color-adjust: exact;
     }
 
-    /* Ensure proper spacing and layout for print */
     .print-content .space-y-1 > * + * {
       margin-top: 4pt !important;
     }

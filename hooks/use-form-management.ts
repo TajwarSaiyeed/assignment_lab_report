@@ -304,11 +304,11 @@ export function useFormManagement() {
       const filename = `${studentName}_${studentId}.pdf`;
 
       const opt = {
-        margin: [0.25, 0.25, 0.25, 0.25],
+        margin: [0.5, 0.25, 0.18, 0.25],
         filename: filename,
         image: { type: "jpeg", quality: 1.0 },
         html2canvas: {
-          scale: 4,
+          scale: 5,
           useCORS: true,
           allowTaint: true,
           letterRendering: true,
