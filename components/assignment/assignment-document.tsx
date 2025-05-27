@@ -61,7 +61,7 @@ export default function AssignmentDocument({
                 <>
                   {/* Lab Report specific layout */}
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">
                         Experiment Name
                       </span>
@@ -74,7 +74,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">
                         Experiment No
                       </span>
@@ -87,7 +87,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">
                         Course Title
                       </span>
@@ -100,7 +100,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">
                         Course Code
                       </span>
@@ -113,7 +113,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">Session</span>
                       <span className="font-bold print:inline print:mx-2">
                         :
@@ -124,7 +124,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">Program</span>
                       <span className="font-bold print:inline print:mx-2">
                         :
@@ -139,7 +139,7 @@ export default function AssignmentDocument({
                 <>
                   {/* Assignment/other document types layout */}
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">
                         {formData.documentTitle || "Assignment"} no
                       </span>
@@ -152,7 +152,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">
                         Course Title
                       </span>
@@ -165,7 +165,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline print:mx-2">
                         Course Code
                       </span>
@@ -176,7 +176,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">Session</span>
                       <span className="font-bold print:inline print:mx-2">
                         :
@@ -187,7 +187,7 @@ export default function AssignmentDocument({
                     </div>
                   </div>
                   <div className="print:block print:mb-2">
-                    <div className="print:flex print:justify-between">
+                    <div className="print:flex print:justify-between space-x-2">
                       <span className="font-bold print:inline">Program</span>
                       <span className="font-bold print:inline print:mx-2">
                         :
