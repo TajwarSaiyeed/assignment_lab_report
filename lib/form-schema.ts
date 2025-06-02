@@ -25,6 +25,7 @@ export const formSchema = z.object({
   // Group project fields
   isGroupProject: z.boolean(),
   groupMembers: z.array(groupMemberSchema),
+  projectTitle: z.string().optional(),
 }).superRefine((data, ctx) => {
   // Conditional validation based on document type
   if (data.documentTitle === "Lab Report") {
@@ -69,6 +70,13 @@ export const formSchema = z.object({
         path: ["groupMembers"],
       });
     }
+  }
+  if (data.documentTitle === "Project Report" && !data.projectTitle) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Project title is required for project reports",
+      path: ["projectTitle"],
+    });
   }
 });
 

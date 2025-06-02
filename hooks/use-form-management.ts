@@ -33,6 +33,7 @@ const defaultValues: FormData = {
   experimentDate: "",
   isGroupProject: false,
   groupMembers: [],
+  projectTitle: "",
 };
 
 export function useFormManagement() {

@@ -540,6 +540,23 @@ export default function AssignmentForm({
                   </FormItem>
                 )}
               />
+
+              {/* Project Title - only show for Project Reports */}
+              {documentType === "Project Report" && (
+                <FormField
+                  control={form.control}
+                  name="projectTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Project Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter project title" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
 
             <div className="flex flex-wrap gap-3 pt-4 border-t">

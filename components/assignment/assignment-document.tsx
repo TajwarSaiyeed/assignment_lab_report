@@ -33,7 +33,7 @@ export default function AssignmentDocument({
                   alt="BGC Trust University Bangladesh Logo"
                   width={80}
                   height={80}
-                  className="h-20 w-auto object-contain print:h-16"
+                  className="h-20 w-auto object-cover print:h-16"
                   priority
                 />
               </div>
@@ -107,6 +107,69 @@ export default function AssignmentDocument({
                       <span className="font-bold print:inline print:mx-2">
                         :
                       </span>
+                      <span className="font-normal print:inline print:flex-1">
+                        {formData.courseCode || "___"}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="print:block print:mb-2">
+                    <div className="print:flex print:justify-between space-x-2">
+                      <span className="font-bold print:inline">Session</span>
+                      <span className="font-bold print:inline print:mx-2">
+                        :
+                      </span>
+                      <span className="font-normal print:inline print:flex-1">
+                        {formData.session || "___"}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="print:block print:mb-2">
+                    <div className="print:flex print:justify-between space-x-2">
+                      <span className="font-bold print:inline">Program</span>
+                      <span className="font-bold print:inline print:mx-2">
+                        :
+                      </span>
+                      <span className="font-normal print:inline print:flex-1">
+                        {formData.program || "___"}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : formData.documentTitle === "Project Report" ? (
+                <>
+                  {/* Project Report specific layout */}
+                  <div className="print:block print:mb-2">
+                    <div className="print:flex print:justify-between space-x-2">
+                      <span className="font-bold print:inline">
+                        Project Title
+                      </span>
+                      <span className="font-bold print:inline print:mx-2">
+                        :
+                      </span>
+                      <span className="font-normal print:inline print:flex-1">
+                        {formData.projectTitle || "___"}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="print:block print:mb-2">
+                    <div className="print:flex print:justify-between space-x-2">
+                      <span className="font-bold print:inline">
+                        Course Title
+                      </span>
+                      <span className="font-bold print:inline print:mx-2">
+                        :
+                      </span>
+                      <span className="font-normal print:inline print:flex-1">
+                        {formData.courseTitle || "___"}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="print:block print:mb-2">
+                    <div className="print:flex print:justify-between space-x-2">
+                      <span className="font-bold print:inline print:mx-2">
+                        Course Code
+                      </span>
+                      <span className="font-bold print:inline">:</span>
                       <span className="font-normal print:inline print:flex-1">
                         {formData.courseCode || "___"}
                       </span>
