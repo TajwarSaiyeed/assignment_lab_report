@@ -29,10 +29,12 @@ import {
   Copy,
   Printer,
   FileDown,
+  Plus,
+  Minus,
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { FormData } from "@/lib/form-schema";
 
 interface AssignmentFormProps {
@@ -65,6 +67,20 @@ export default function AssignmentForm({
   onSubmit,
 }: AssignmentFormProps) {
   const documentType = form.watch("documentTitle");
+  const isGroupProject = form.watch("isGroupProject");
+  
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "groupMembers",
+  });
+
+  const addGroupMember = () => {
+    append({ name: "", id: "" });
+  };
+
+  const removeGroupMember = (index: number) => {
+    remove(index);
+  };
 
   return (
     <Card className="print:hidden">
@@ -110,6 +126,39 @@ export default function AssignmentForm({
                       <FormControl>
                         <Input placeholder="Enter number" {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              {/* Group Project Toggle - only show for Project Reports */}
+              {documentType === "Project Report" && (
+                <FormField
+                  control={form.control}
+                  name="isGroupProject"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Project Type</FormLabel>
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value === "group");
+                          if (value === "individual") {
+                            form.setValue("groupMembers", []);
+                          }
+                        }}
+                        value={field.value ? "group" : "individual"}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select project type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="individual">Individual Project</SelectItem>
+                          <SelectItem value="group">Group Project</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -223,35 +272,108 @@ export default function AssignmentForm({
                 )}
               />
 
-              {/* Student Name */}
-              <FormField
-                control={form.control}
-                name="studentName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Student Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Student Information - conditional based on project type */}
+              {documentType === "Project Report" && isGroupProject ? (
+                // Group project members section
+                <div className="col-span-full">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Group Members</FormLabel>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={addGroupMember}
+                        className="flex items-center gap-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add Member
+                      </Button>
+                    </div>
+                    
+                    {fields.length === 0 && (
+                      <p className="text-sm text-muted-foreground">
+                        Click &quot;Add Member&quot; to add group members
+                      </p>
+                    )}
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {fields.map((field, index) => (
+                        <div key={field.id} className="flex gap-2 items-end">
+                          <div className="flex-1 space-y-2">
+                            <FormField
+                              control={form.control}
+                              name={`groupMembers.${index}.name`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Student Name</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Enter student name" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name={`groupMembers.${index}.id`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Student ID</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Enter student ID" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeGroupMember(index)}
+                            className="mb-2"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                // Individual student fields
+                <>
+                  <FormField
+                    control={form.control}
+                    name="studentName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Student Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              {/* Internal ID */}
-              <FormField
-                control={form.control}
-                name="internalId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Internal ID</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your ID" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={form.control}
+                    name="internalId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Internal ID</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your ID" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
 
               {/* Semester */}
               <FormField

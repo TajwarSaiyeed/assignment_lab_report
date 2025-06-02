@@ -231,31 +231,55 @@ export default function AssignmentDocument({
                   Submitted By
                 </h3>
                 <div className="space-y-2 text-base print:space-y-1 print:text-sm">
-                  <div className="space-y-1">
+                  {formData.documentTitle === "Project Report" &&
+                  formData.isGroupProject &&
+                  formData.groupMembers?.length > 0 ? (
                     <div>
-                      <span className="font-bold">Name: </span>
-                      <span className="font-normal">
-                        {formData.studentName || "___"}
-                      </span>
+                      <h4 className="font-bold">Group Members:</h4>
+                      {formData.groupMembers.map((member, index) => (
+                        <div key={index}>
+                          <div>
+                            <span className="font-bold">Name & ID: </span>
+                            <span className="font-normal">
+                              {(member.name || "_______________") +
+                                " (" +
+                                (member.id || "_______________") +
+                                ")"}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="font-bold text-green-800 mt-3">
+                        Department of CSE, BGCTUB
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-bold">Internal ID: </span>
-                      <span className="font-normal">
-                        {formData.internalId || "___"}
-                      </span>
+                  ) : (
+                    <div className="space-y-1">
+                      <div>
+                        <span className="font-bold">Name: </span>
+                        <span className="font-normal">
+                          {formData.studentName || "___"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-bold">Internal ID: </span>
+                        <span className="font-normal">
+                          {formData.internalId || "___"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-bold">
+                          {formData.semester || "___"} Semester Section:{" "}
+                        </span>
+                        <span className="font-normal">
+                          {formData.section || "___"}
+                        </span>
+                      </div>
+                      <div className="font-bold text-green-800">
+                        Department of CSE, BGCTUB
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-bold">
-                        {formData.semester || "___"} Semester Section:{" "}
-                      </span>
-                      <span className="font-normal">
-                        {formData.section || "___"}
-                      </span>
-                    </div>
-                    <div className="font-bold text-green-800">
-                      Department of CSE, BGCTUB
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

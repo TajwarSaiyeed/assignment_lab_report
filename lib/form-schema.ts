@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+const groupMemberSchema = z.object({
+  name: z.string().min(1, "Student name is required"),
+  id: z.string().min(1, "Student ID is required"),
+});
+
 export const formSchema = z.object({
   documentTitle: z.string().min(1, "Document type is required"),
   assignmentNo: z.string().optional(),
@@ -17,6 +22,9 @@ export const formSchema = z.object({
   experimentName: z.string().optional(),
   experimentNo: z.string().optional(),
   experimentDate: z.string().optional(),
+  // Group project fields
+  isGroupProject: z.boolean(),
+  groupMembers: z.array(groupMemberSchema),
 }).superRefine((data, ctx) => {
   // Conditional validation based on document type
   if (data.documentTitle === "Lab Report") {
@@ -51,6 +59,18 @@ export const formSchema = z.object({
       });
     }
   }
+
+  // Group project validation for Project Reports
+  if (data.documentTitle === "Project Report" && data.isGroupProject) {
+    if (data.groupMembers.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "At least one group member is required for group projects",
+        path: ["groupMembers"],
+      });
+    }
+  }
 });
 
 export type FormData = z.infer<typeof formSchema>;
+export type GroupMember = z.infer<typeof groupMemberSchema>;
